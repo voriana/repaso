@@ -47,3 +47,5 @@ indexbuscar=2
 
 
 print(list(familia.items())[indexbuscar])
+print(familia["residencias"]["ResidenciaNac"])
+print(familia["Comidas"][1])
