@@ -1,3 +1,2 @@
-l = [10, 30, 50, 70]
-l += l[0:5]
-print (l)
+b = "Hello, World!"
+print(b[-5:-1])
