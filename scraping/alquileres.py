@@ -47,7 +47,7 @@ class AlquilerSpider(CrawlSpider):
 
         item.add_xpath('zona','//div/h3/text()') #/html/body/main/div[1]/div[1]/div[3]/div[4]/section[3]/p[2]/text()
         item.add_xpath('precio','//p[@class="titlebar__price"]/text()') #//*[@id="section_2"]/li[3]/p/strong/text()
-        item.add_xpath('cantAmb','//div/p/[@class=strong]/text()')
+        item.add_xpath('cantAmb','/html/body/main/div[1]/div[1]/div[3]/div[4]/ul/li[1]/div/p[2]/text()')
         #item.add_xpath('expensas','')
         #item.add_xpath('requisitos','')
 
@@ -55,8 +55,8 @@ class AlquilerSpider(CrawlSpider):
 
 # CORRIENDO SCRAPY SIN LA TERMINAL
 #process = CrawlerProcess({
-#     'FEED_FORMAT': 'json',
-#     'FEED_URI': 'archivo_alquileres.json'
+#     'FEED_FORMAT': 'csv',
+#     'FEED_URI': 'archivo_alquileres.csv'
 # })
 #process.crawl(AlquilerSpider)
 #process.start()
