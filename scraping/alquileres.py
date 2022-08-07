@@ -15,10 +15,13 @@ class Alquileres(Item):
 
     #atributos de esta clase--> que campos quiero obtener
     zona= Field()
+    calle=Field()
     precio=Field()
-    cantAmb=Field()
-    #expensas=Field()
-    #requesitos=Field()
+    tipoMoneda=Field()
+    habitaciones=Field()
+    expensas=Field()
+    piso=Field()
+    m2=Field()
 
 class AlquilerSpider(CrawlSpider):
     name="OrianaAlquileres"
@@ -41,17 +44,42 @@ class AlquilerSpider(CrawlSpider):
             
     )
 
+    def quitarEspacios(self, texto):
+        nuevoTexto= (texto.replace('\n','')).strip()
+        return nuevoTexto
+
+    def obtenerMoneda(self,texto):
+        moneda=self.quitarEspacios(texto)[0]
+        return moneda
+    
+    def getFinalTexto(self,texto):
+        nuevo_texto=texto.split(",")[-1]
+        nuevo_texto=nuevo_texto.capitalize().strip()
+        return nuevo_texto
+    
+    def getInicioTexto(self,texto):
+        calle=texto.split(",")[0]
+        calle=calle.capitalize().strip()
+        return calle
+    
+    
+   
+
     def parseAlquiler(self,response):
         sel=Selector(response)
-        item=ItemLoader(Alquileres(),sel)
-
-        item.add_xpath('zona','//div/h3/text()') #/html/body/main/div[1]/div[1]/div[3]/div[4]/section[3]/p[2]/text()
-        item.add_xpath('precio','//p[@class="titlebar__price"]/text()') #//*[@id="section_2"]/li[3]/p/strong/text()
-        item.add_xpath('cantAmb','/html/body/main/div[1]/div[1]/div[3]/div[4]/ul/li[1]/div/p[2]/text()')
-        #item.add_xpath('expensas','')
+        item=ItemLoader(Alquileres(),sel)     
+        item.add_xpath('zona','//div/h2/text()',MapCompose(self.getFinalTexto) )
+        item.add_xpath('calle','//div/h3/text()',MapCompose(self.getInicioTexto))
+        item.add_xpath('piso','//div/h3/text()',MapCompose(self.getFinalTexto)) 
+        item.add_xpath('m2','///ul/li[1]/div/p[2]/text()')
+        item.add_xpath('precio','//p[@class="titlebar__price"]/text()',MapCompose(self.quitarEspacios))
+        item.add_xpath('tipoMoneda','//p[@class="titlebar__price"]/text()',MapCompose(self.obtenerMoneda)) 
+        item.add_xpath('habitaciones','//*[@id="section_1"]/li[1]/p/strong/text()',MapCompose(self.quitarEspacios)) #esta tambien funciona //section/ul[@id="section_1" and @class="property-features"]/li/p/strong
+        item.add_xpath('expensas','//*[@id="section_1"]/li[9]/p/strong/text()',MapCompose(self.quitarEspacios))
         #item.add_xpath('requisitos','')
 
         yield item.load_item()
+
 
 # CORRIENDO SCRAPY SIN LA TERMINAL
 #process = CrawlerProcess({
