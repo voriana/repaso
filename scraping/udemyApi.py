@@ -1,7 +1,8 @@
 import requests
 import json
+import pandas as pd
 
-
+curso_totales=[]
 
 headers={
     "referer": "https://www.udemy.com/courses/search/?src=ukw&q=python",
@@ -16,9 +17,17 @@ for i in range(1,4):
     cursos=data['courses']
 
     for curso in cursos:
-        print('title '+curso["title"])
-        print('reviews '+str(curso['num_reviews']))
-        print('rating' +str(curso['rating']))
-        print()
+        curso_totales.append({
+            'title ':curso["title"],
+            'reviews ': str(curso['num_reviews']),
+            'rating' : str(curso['rating'])
+        })
+
+
+
+df=pd.DataFrame(curso_totales)
+print(df)
+df.to_csv('cursosUdemy.csv')
+    
 
     
