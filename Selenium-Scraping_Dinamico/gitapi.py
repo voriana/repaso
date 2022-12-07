@@ -19,9 +19,14 @@ auteti_token= parser.xpath('//*[@id="login"]/div[4]/form/input[1]')
 
 login_session='https://github.com/session'
 #creo un dic con los datos de body del para enviar al loguearme
+archivo= open('D:\cursos\web scraping\loginGit.txt.txt',mode="r")
+login= archivo.readline().strip()
+passw=archivo.readline().strip()
 login_data={
-"login":open('D:\cursos\web scraping\loginGit.txt.txt',mode="r").readline().strip(),
-    "passw":open('D:\cursos\web scraping\loginGit.txt.txt',mode="r").readline().strip(),
+    "login":login,
+    "password": passw,
+#"login":open('D:\cursos\web scraping\loginGit.txt.txt',mode="r").readline().strip(),
+#    "passw":open('D:\cursos\web scraping\loginGit.txt.txt',mode="r").readline().strip(),
     "commit": "Sign in",
     "authenticity_token":auteti_token,
 }
@@ -32,7 +37,7 @@ session.post(url=login_session,data=login_data,headers=header)
 data_url='https://github.com/voriana?tab=repositories'
 respuesta= session.get(url=data_url,headers=header)
 parser= html.fromstring(respuesta.text)
-lista_repo= parser.xpath('//h3[@class="wb-break-all"]/a/text()')
+lista_repo= parser.xpath('//div[1]/div[1]/h3/a/text()')
 
 #recorro los repositorios
 for repo in lista_repo:
