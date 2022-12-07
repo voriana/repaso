@@ -1,0 +1,3 @@
+manzana,1,3
+pera,2,5
+durazno,4,9
